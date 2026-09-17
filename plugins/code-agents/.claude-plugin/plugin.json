@@ -1,6 +1,6 @@
 {
   "name": "code-agents",
-  "version": "0.3.0",
-  "description": "Five role-scoped coding agents (explorer, quick-implementer, implementer, validator, reviewer), the delegating-code-work skill that runs them as a pipeline, and the onboarding-repo-for-agents skill that writes the AGENTS.md they read.",
+  "version": "0.4.0",
+  "description": "Six role-scoped coding agents (explorer, quick-implementer, implementer, validator, code reviewer, spec reviewer), the delegating-code-work skill that runs them as a pipeline, and the onboarding-repo-for-agents skill that writes the AGENTS.md they read.",
   "author": { "name": "Chris Pitman" }
 }

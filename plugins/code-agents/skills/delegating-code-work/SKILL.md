@@ -1,12 +1,23 @@
 ---
 name: delegating-code-work
-description: Use when orchestrating a code change with the code-agents plugin (code-explorer, code-quick-implementer, code-implementer, code-validator, code-reviewer), before dispatching the first agent, and again when an agent's report comes back and the next step is unclear.
+description: Use when orchestrating a code change with the code-agents plugin (code-explorer, code-quick-implementer, code-implementer, code-validator, code-reviewer, spec-reviewer), before dispatching the first agent, when a brainstormed design is approved, and when an agent's report comes back.
 ---
 
 # Delegating code work
 
 ## Overview
 The orchestrator routes, keeps conclusions, and commits. Agents do the reading, writing, running and reviewing. Every report ends with a fixed slot the orchestrator merges into `AGENTS.md`, so the repo's rules grow as the work does.
+
+## Before code: route by brainstorming path
+Design happens in your own context with `superpowers:brainstorming`; it needs the user, so it is never delegated. Once the path is classified:
+
+| Path | Sequence |
+|---|---|
+| Spike | `code-explorer`, report a recommendation, keep nothing |
+| Bounded | design in chat, user approval, then the entry-point table below. If the design touches shared state, a file-plus-state protocol, or a trust boundary, dispatch `spec-reviewer` on the in-chat design first; otherwise it is optional |
+| Architectural | brainstorming writes the spec, then `spec-reviewer` on the spec (mandatory, before `superpowers:writing-plans`); fix BLOCKING findings in the spec and re-review; then writing-plans; then the loop below once per plan task, in place of the generic implementer and reviewer in `superpowers:subagent-driven-development` |
+
+A `spec-reviewer` verdict of BLOCKED means the spec changes, not the plan. Never start writing-plans on a BLOCKED spec.
 
 ## Entry point
 | Situation | Dispatch |
@@ -22,7 +33,7 @@ If `code-quick-implementer` escalates, re-dispatch the same brief to `code-imple
 1. Implementer returns: changed files, tests it ran, a validation manifest, and a `Learned for AGENTS.md` slot.
 2. `code-validator` runs the manifest. On failure classified as regression or test issue, resume the SAME implementer with the evidence; it repairs and returns a smaller manifest. On environment or pre-existing, fix the environment or note it and continue.
 3. `code-reviewer` reviews the diff. `Verdict: BLOCKED` sends the findings back to the same implementer, then validator, then reviewer again (re-review reports only blocking status). `Verdict: CLEAR` exits the loop.
-   **Round cap:** two BLOCKED rounds on the same area is the limit. On the third, ask the reviewer to name the design defect, then STOP: do not dispatch another repair. Report to the user with the defect named and the working tree left as is. A redesign is the user's decision.
+   **Round cap:** two BLOCKED rounds on the same area is the limit. On the third, ask the reviewer to name the design defect, then STOP: do not dispatch another repair. Report to the user with the defect named and the working tree left as is. A redesign is the user's decision; if they choose it, the route is brainstorming then `spec-reviewer`, never straight to an implementer.
 4. Merge every `Learned for AGENTS.md` slot into `AGENTS.md` under the matching heading (Validation notes, Invariants, Conventions). One bullet per item, rule not story. If `AGENTS.md` does not exist, run `onboarding-repo-for-agents` first.
 5. Commit. Advisory findings go to the repo's TODO file, not into another review round.
 

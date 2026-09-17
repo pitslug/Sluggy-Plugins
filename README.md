@@ -4,7 +4,7 @@ A [Claude Code](https://claude.com/claude-code) plugin marketplace. Each folder 
 
 | Plugin | What it gives you |
 |---|---|
-| [`code-agents`](plugins/code-agents) | Five role-scoped coding agents, a skill that runs them as a pipeline, and a skill that prepares a repo for them |
+| [`code-agents`](plugins/code-agents) | Six role-scoped coding agents, a skill that runs them as a pipeline, and a skill that prepares a repo for them |
 
 ## Install
 
@@ -30,18 +30,22 @@ A small pipeline of agents, each with one job, one model, and one effort level. 
 | `code-quick-implementer` | Small, mechanical, well-specified edits in one or two files. Runs its own narrow tests. Escalates anything ambiguous or invariant-touching to `code-implementer`. | Opus 4.8, low |
 | `code-implementer` | Non-trivial slices. Test-first: writes the tests, watches them fail, implements, runs its own added tests, then hands a selector manifest to the validator. | Opus 4.8, high |
 | `code-validator` | Read-only runner. Executes the assigned selectors, classifies failures (regression / test issue / pre-existing / flaky / environment), never edits. | Sonnet 4.6, low |
+| `spec-reviewer` | Adversarial review of a design before any implementer sees it: lock map for shared resources, crash-point table for file-plus-state protocols, trust boundaries, invariants, and the test that catches each. Mandatory on architectural specs, optional on bounded designs. | Fable 5.1, high |
 | `code-reviewer` | Adversarial pre-commit review. Finds the concrete input that breaks the change, with mandatory checks for shared resources, persisted values that drive file or process operations, file-plus-state crash points, and tests that cannot fail. Two severities: BLOCKING and ADVISORY. | Fable 5.1, high |
 
 ### How they fit together
 
 ```
+brainstorm (in context)  ->  spec-reviewer  ->  writing-plans
+                                                     |
 explore  ->  quick-implementer | implementer  ->  validator  ->  reviewer  ->  commit
                                     ^                 |              |
-                                    +---- repair -----+   loop until no BLOCKING
+                                    +---- repair -----+   loop until no BLOCKING (cap: 2 rounds per area)
 ```
 
 - The implementer never claims green beyond the tests it ran itself; the validator reports the rest.
 - The reviewer's verdict line is `Verdict: BLOCKED (n blocking)` or `Verdict: CLEAR (n advisory)`. Advisory items go to TODO after commit, not into another review round.
+- Design is never delegated: `superpowers:brainstorming` runs in the orchestrator's context because it needs the user. The spec it produces goes to `spec-reviewer` before any plan is written.
 - Two BLOCKED rounds on the same area is the cap. On the third the reviewer names the design defect and the orchestrator stops; a redesign is the human's call.
 - Implementers and the reviewer end every report with a `Learned for AGENTS.md` slot. The orchestrator merges those into `AGENTS.md` before committing, so the repo's rules grow with the work.
 - Nothing in the pipeline commits or pushes. That stays with the orchestrator and the human.
