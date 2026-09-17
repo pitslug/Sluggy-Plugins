@@ -26,5 +26,6 @@ A Claude Code plugin marketplace owned by Chris Pitman. Each folder under `plugi
 - Layout: `.claude-plugin/marketplace.json` at the root lists plugins; each plugin has `.claude-plugin/plugin.json`, `agents/*.md`, `skills/<name>/SKILL.md`. Slice plugins by audience (who wants all of it), not by file type.
 - Agent files: YAML frontmatter (`name`, `description`, `model`, `effort`), then a one-line progress message naming model and effort, then `## Workflow` or `## Method`, `## Rules`, and a strict report format. Descriptions say when to use the agent, not how it works.
 - Skills follow `superpowers:writing-skills`: `description` starts with "Use when", states triggers only, never summarises the workflow; body under ~500 words; fixed templates over prose reminders; a Common mistakes section.
-- Line endings are LF (`.gitattributes`), commits use a conventional prefix (`docs:`, `code-agents 0.x.0:` for releases) and end with the Co-Authored-By line for the model that wrote them.
+- Line endings are LF (`.gitattributes`).
+- Commits: one imperative subject line (no conventional prefix, issue refs in parentheses at the end, e.g. `(#7 #8)`; a release subject names the plugin and version, `code-agents 0.5.0: …`); a one-or-two-sentence body only when the diff does not explain the reason; keep the `Co-Authored-By` trailer for model-written commits.
 - The README is the user-facing description of the agents and the loop; update it in the same commit as the behaviour it describes.
