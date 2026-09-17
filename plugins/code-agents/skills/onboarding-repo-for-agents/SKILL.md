@@ -50,7 +50,7 @@ Not for: rewriting an existing, healthy `AGENTS.md`. Add to it under the same he
 
 ## Conventions
 <Naming, layout, where tests live, commit style. Short bullets only.>
-- Follow-ups file: `<path | "None">`; closed items file: `<path | "None">`
+- Follow-ups file: `<path | "None">`; closed items file: `<path | "None">`; history file (dated engineering record, searched by area, never read whole): `<path | "None">`
 - None known
 ```
 
