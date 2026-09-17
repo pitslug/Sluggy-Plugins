@@ -30,7 +30,7 @@ A small pipeline of agents, each with one job, one model, and one effort level. 
 | `code-quick-implementer` | Small, mechanical, well-specified edits in one or two files. Runs its own narrow tests. Escalates anything ambiguous or invariant-touching to `code-implementer`. | Opus 4.8, low |
 | `code-implementer` | Non-trivial slices. Test-first: writes the tests, watches them fail, implements, runs its own added tests, then hands a selector manifest to the validator. | Opus 4.8, high |
 | `code-validator` | Read-only runner. Executes the assigned selectors, classifies failures (regression / test issue / pre-existing / flaky / environment), never edits. | Sonnet 4.6, low |
-| `code-reviewer` | Adversarial pre-commit review. Finds the concrete input that breaks the change. Two severities: BLOCKING (state corruption, data loss, false claims, exploitable security) and ADVISORY. | Fable 5.1, medium |
+| `code-reviewer` | Adversarial pre-commit review. Finds the concrete input that breaks the change, with mandatory checks for shared resources, persisted values that drive file or process operations, file-plus-state crash points, and tests that cannot fail. Two severities: BLOCKING and ADVISORY. | Fable 5.1, high |
 
 ### How they fit together
 
@@ -42,6 +42,7 @@ explore  ->  quick-implementer | implementer  ->  validator  ->  reviewer  ->  c
 
 - The implementer never claims green beyond the tests it ran itself; the validator reports the rest.
 - The reviewer's verdict line is `Verdict: BLOCKED (n blocking)` or `Verdict: CLEAR (n advisory)`. Advisory items go to TODO after commit, not into another review round.
+- Two BLOCKED rounds on the same area is the cap. On the third the reviewer names the design defect and the orchestrator stops; a redesign is the human's call.
 - Implementers and the reviewer end every report with a `Learned for AGENTS.md` slot. The orchestrator merges those into `AGENTS.md` before committing, so the repo's rules grow with the work.
 - Nothing in the pipeline commits or pushes. That stays with the orchestrator and the human.
 
