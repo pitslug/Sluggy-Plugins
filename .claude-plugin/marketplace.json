@@ -1,0 +1,11 @@
+{
+  "name": "Sluggy-Plugins",
+  "owner": { "name": "Chris Pitman" },
+  "plugins": [
+    {
+      "name": "code-agents",
+      "source": "./plugins/code-agents",
+      "description": "Role-scoped coding agents and the repo onboarding skill."
+    }
+  ]
+}

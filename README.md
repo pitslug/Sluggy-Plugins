@@ -1,2 +1,76 @@
-# Sluggy-Plugins
-Skills and Agents used for various AI processes
+# sluggy-plugins
+
+A [Claude Code](https://claude.com/claude-code) plugin marketplace. Each folder under `plugins/` is one installable plugin. Add the marketplace once, then install only the plugins you want.
+
+| Plugin | What it gives you |
+|---|---|
+| [`code-agents`](plugins/code-agents) | Five role-scoped coding agents and a skill that prepares a repo for them |
+
+## Install
+
+```bash
+claude plugin marketplace add pitslug/Sluggy-Plugins
+```
+
+```bash
+claude plugin install code-agents@Sluggy-Plugins
+```
+
+Installed agents appear namespaced, for example `code-agents:code-reviewer`. If you had loose copies in `~/.claude/agents/`, delete them after installing so only one version exists.
+
+The plugin CLI has changed flags a few times; if the commands above don't match, `claude plugin --help` is the source of truth.
+
+## code-agents
+
+A small pipeline of agents, each with one job, one model, and one effort level. The orchestrating session delegates to them and keeps the conclusions, not the file dumps.
+
+| Agent | Role | Model / effort |
+|---|---|---|
+| `code-explorer` | Read-only scout. Locates the relevant code and returns a condensed report with `path:line` references, contracts, gotchas and open questions. | Opus 4.8, low |
+| `code-quick-implementer` | Small, mechanical, well-specified edits in one or two files. Runs its own narrow tests. Escalates anything ambiguous or invariant-touching to `code-implementer`. | Opus 4.8, low |
+| `code-implementer` | Non-trivial slices. Test-first: writes the tests, watches them fail, implements, runs its own added tests, then hands a selector manifest to the validator. | Opus 4.8, high |
+| `code-validator` | Read-only runner. Executes the assigned selectors, classifies failures (regression / test issue / pre-existing / flaky / environment), never edits. | Sonnet 4.6, low |
+| `code-reviewer` | Adversarial pre-commit review. Finds the concrete input that breaks the change. Two severities: BLOCKING (state corruption, data loss, false claims, exploitable security) and ADVISORY. | Fable 5.1, medium |
+
+### How they fit together
+
+```
+explore  ->  quick-implementer | implementer  ->  validator  ->  reviewer  ->  commit
+                                    ^                 |              |
+                                    +---- repair -----+   loop until no BLOCKING
+```
+
+- The implementer never claims green beyond the tests it ran itself; the validator reports the rest.
+- The reviewer's verdict line is `Verdict: BLOCKED (n blocking)` or `Verdict: CLEAR (n advisory)`. Advisory items go to TODO after commit, not into another review round.
+- Nothing in the pipeline commits or pushes. That stays with the orchestrator and the human.
+
+### AGENTS.md
+
+Every agent reads `AGENTS.md` at the repo root first (falling back to `CLAUDE.md`) and looks for three headings:
+
+- **Validation notes**: build and test commands, focused selector form, shared build outputs, known blockers such as a running app that locks files, commands never to run.
+- **Invariants**: the rules that must not regress.
+- **Conventions**: naming, layout, where tests live.
+
+`AGENTS.md` is the tool-neutral file that Codex, Cursor, Copilot and others also read. A one-line `@AGENTS.md` in `CLAUDE.md` makes Claude Code see the same content.
+
+### onboarding-repo-for-agents (skill)
+
+Run it once in any repo that has no `AGENTS.md`, or when a validator reports it could not find "Validation notes". It detects the stack from the manifests, asks you the four questions only you can answer (locking processes, required services, never-run commands, do-not-regress rules), writes `AGENTS.md` with the exact headings above, and adds the import to `CLAUDE.md`. It does not commit.
+
+### Models
+
+Model IDs are pinned in each agent's frontmatter. The reviewer uses `claude-fable-5-1`; on an account without Fable access, change that line to `model: opus`. Everything else runs on generally available models.
+
+## Adding a plugin
+
+1. Create `plugins/<name>/.claude-plugin/plugin.json` with `name`, `version` and `description`.
+2. Add `agents/`, `skills/` or `commands/` folders as needed. Skills are one folder each containing `SKILL.md`.
+3. Add an entry to `.claude-plugin/marketplace.json`.
+4. Bump that plugin's version on every change. Other plugins are unaffected.
+
+Slice plugins by audience, not by file type: one plugin should be something a person wants all of.
+
+## Licence
+
+[MIT](LICENSE).
