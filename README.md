@@ -46,6 +46,7 @@ explore  ->  quick-implementer | implementer  ->  validator  ->  reviewer  ->  c
 - The implementer never claims green beyond the tests it ran itself; the validator reports the rest.
 - The reviewer's verdict line is `Verdict: BLOCKED (n blocking)` or `Verdict: CLEAR (n advisory)`. Advisory items go to TODO after commit, not into another review round.
 - Design is never delegated: `superpowers:brainstorming` runs in the orchestrator's context because it needs the user. The spec it produces goes to `spec-reviewer` before any plan is written.
+- Advisory findings are filed to the repo's follow-ups file (named in `AGENTS.md` Conventions, default `TODO.md`) and closed items move to its closed-items file, in the commit that ships the work. Open follow-ups in the same area go into an implementer's brief as context, never as scope.
 - Two BLOCKED rounds on the same area is the cap. On the third the reviewer names the design defect and the orchestrator stops; a redesign is the human's call.
 - Implementers and the reviewer end every report with a `Learned for AGENTS.md` slot. The orchestrator merges those into `AGENTS.md` before committing, so the repo's rules grow with the work.
 - Nothing in the pipeline commits or pushes. That stays with the orchestrator and the human.

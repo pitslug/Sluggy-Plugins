@@ -29,13 +29,15 @@ A `spec-reviewer` verdict of BLOCKED means the spec changes, not the plan. Never
 
 If `code-quick-implementer` escalates, re-dispatch the same brief to `code-implementer` without editing it.
 
+Before dispatching any implementer, read the repo's follow-ups file (named under Conventions in `AGENTS.md`; default `TODO.md` at the root) for open items in the same area and put them in the brief as context. They are not scope unless the user says so.
+
 ## The loop
 1. Implementer returns: changed files, tests it ran, a validation manifest, and a `Learned for AGENTS.md` slot.
 2. `code-validator` runs the manifest. On failure classified as regression or test issue, resume the SAME implementer with the evidence; it repairs and returns a smaller manifest. On environment or pre-existing, fix the environment or note it and continue.
 3. `code-reviewer` reviews the diff. `Verdict: BLOCKED` sends the findings back to the same implementer, then validator, then reviewer again (re-review reports only blocking status). `Verdict: CLEAR` exits the loop.
    **Round cap:** two BLOCKED rounds on the same area is the limit. On the third, ask the reviewer to name the design defect, then STOP: do not dispatch another repair. Report to the user with the defect named and the working tree left as is. A redesign is the user's decision; if they choose it, the route is brainstorming then `spec-reviewer`, never straight to an implementer.
 4. Merge every `Learned for AGENTS.md` slot into `AGENTS.md` under the matching heading (Validation notes, Invariants, Conventions). One bullet per item, rule not story. If `AGENTS.md` does not exist, run `onboarding-repo-for-agents` first.
-5. Commit. Advisory findings go to the repo's TODO file, not into another review round.
+5. File and commit. Advisory findings go to the follow-ups file, one line each with the reviewer's summary and `file:line`, never into another review round. Any follow-up item this work closed moves to the closed-items file if the repo keeps one (Conventions in `AGENTS.md`), in the same commit.
 
 ## Rules
 - Resume the agent that owns the files; do not hand a repair to a fresh one.
@@ -47,5 +49,6 @@ If `code-quick-implementer` escalates, re-dispatch the same brief to `code-imple
 ## Common mistakes
 - Skipping the validator because the implementer said its own tests passed. Those were narrow selectors, by design.
 - Treating ADVISORY findings as a reason to loop. They are filed, not fixed, unless the user asks.
+- Pulling a related follow-up item into the slice because it was nearby. It goes in the brief as context; scope changes are the user's call.
 - Writing the learned item as a paragraph about what happened instead of the rule that must hold.
 - Counting a re-review that found a NEW blocking item in a different area as a round against the first area. Rounds are per area.
