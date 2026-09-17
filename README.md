@@ -4,7 +4,7 @@ A [Claude Code](https://claude.com/claude-code) plugin marketplace. Each folder 
 
 | Plugin | What it gives you |
 |---|---|
-| [`code-agents`](plugins/code-agents) | Five role-scoped coding agents and a skill that prepares a repo for them |
+| [`code-agents`](plugins/code-agents) | Five role-scoped coding agents, a skill that runs them as a pipeline, and a skill that prepares a repo for them |
 
 ## Install
 
@@ -42,6 +42,7 @@ explore  ->  quick-implementer | implementer  ->  validator  ->  reviewer  ->  c
 
 - The implementer never claims green beyond the tests it ran itself; the validator reports the rest.
 - The reviewer's verdict line is `Verdict: BLOCKED (n blocking)` or `Verdict: CLEAR (n advisory)`. Advisory items go to TODO after commit, not into another review round.
+- Implementers and the reviewer end every report with a `Learned for AGENTS.md` slot. The orchestrator merges those into `AGENTS.md` before committing, so the repo's rules grow with the work.
 - Nothing in the pipeline commits or pushes. That stays with the orchestrator and the human.
 
 ### AGENTS.md
@@ -53,6 +54,10 @@ Every agent reads `AGENTS.md` at the repo root first (falling back to `CLAUDE.md
 - **Conventions**: naming, layout, where tests live.
 
 `AGENTS.md` is the tool-neutral file that Codex, Cursor, Copilot and others also read. A one-line `@AGENTS.md` in `CLAUDE.md` makes Claude Code see the same content.
+
+### delegating-code-work (skill)
+
+The orchestrator's side of the pipeline: which agent to dispatch first, the validate-review-repair loop, when to resume the same agent versus start a fresh one, merging the learned slots into `AGENTS.md`, and when to commit. Load it before dispatching the first agent on any code change.
 
 ### onboarding-repo-for-agents (skill)
 

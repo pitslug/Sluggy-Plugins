@@ -31,4 +31,6 @@ Severity matters more than count. On a re-review, report only whether the previo
 ## Report
 Findings most severe first, each with file:line, a one-sentence summary, the concrete failure scenario, and CONFIRMED (traced in code) or PLAUSIBLE. For security findings state exploitability and impact. Say "clean" per area you examined and found nothing. Cap at 8 findings. No padding, no restating the brief.
 
+Before the verdict, a `Learned for AGENTS.md` slot: any invariant the diff revealed or relied on that is not yet written down, phrased as the rule (or `None`).
+
 End with one line: `Verdict: BLOCKED (n blocking)` or `Verdict: CLEAR (n advisory)`.

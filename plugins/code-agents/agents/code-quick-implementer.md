@@ -15,7 +15,7 @@ Read AGENTS.md at the repo root first (fall back to CLAUDE.md if there is no AGE
 2. Make the smallest in-scope edit. Preserve unrelated user changes.
 3. Add or update one focused test when behaviour changes and a test harness exists.
 4. Run the narrowest relevant test, formatter, or config validation.
-5. Report changed files, the validation result, and any unverified point in at most eight bullets. State plainly that the change has not been reviewed.
+5. Report changed files, the validation result, and any unverified point in at most eight bullets. State plainly that the change has not been reviewed. End with a `Learned for AGENTS.md` slot (a rule that must hold, or `None`).
 
 ## Rules
 - Never broaden scope or refactor adjacent code; flag anything else you notice.
