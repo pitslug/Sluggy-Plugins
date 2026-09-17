@@ -16,6 +16,8 @@ claude plugin marketplace add pitslug/Sluggy-Plugins
 claude plugin install code-agents@Sluggy-Plugins
 ```
 
+If the plugin is enabled through claude.ai instead, it syncs to every machine on the account, but the sync does not poll GitHub: after each push, open claude.ai → Manage marketplaces → the three-dot menu on the marketplace → Check for updates.
+
 Installed agents appear namespaced, for example `code-agents:code-reviewer`. If you had loose copies in `~/.claude/agents/`, delete them after installing so only one version exists.
 
 The plugin CLI has changed flags a few times; if the commands above don't match, `claude plugin --help` is the source of truth.
