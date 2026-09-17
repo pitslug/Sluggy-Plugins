@@ -14,7 +14,7 @@ A Claude Code plugin marketplace owned by Chris Pitman. Each folder under `plugi
 ## Invariants
 - The three H2 headings `## Validation notes`, `## Invariants`, `## Conventions` are load-bearing: every agent greps a target repo's `AGENTS.md` for them by exact text, and the onboarding skill's template emits them. Never rename them in an agent, a skill or the template without changing all three together.
 - Every behaviour change to an agent or skill ships with a scenario-pair test (see Validation notes). Wording that was not shown to change an agent's behaviour is not a fix.
-- Every change to `plugins/code-agents/` bumps `version` in its `plugin.json` before push; the sync keys on the version, so an unbumped change never reaches an installed copy. Manifest-only wording changes may wait for the next bump.
+- Every change to `plugins/code-agents/` bumps `version` in its `plugin.json` AND the matching `version` in `.claude-plugin/marketplace.json` before push; the sync keys on the version, so an unbumped change never reaches an installed copy. Manifest-only wording changes may wait for the next bump.
 - Reviewers use one severity vocabulary: BLOCKING / ADVISORY with the verdict line `Verdict: BLOCKED (n blocking)` or `Verdict: CLEAR (n advisory)`. The orchestrator loop keys on that line. Do not reintroduce P0–P3 or APPROVE / REQUEST_CHANGES.
 - Every implementer and reviewer report ends with a `Learned for AGENTS.md` slot (a rule or `None`). It is a structural slot, not a reminder sentence; keep it in the report template.
 - The repair loop is capped at two BLOCKED rounds per area; the third names the design defect and stops. Do not add a way for the orchestrator to run a fourth round.
