@@ -8,7 +8,7 @@
       "name": "code-agents",
       "source": "./plugins/code-agents",
       "description": "Six role-scoped coding agents (explorer, quick-implementer, implementer, validator, code reviewer, spec reviewer) plus the delegating-code-work and onboarding-repo-for-agents skills.",
-      "version": "0.7.0"
+      "version": "0.8.0"
     }
   ]
 }

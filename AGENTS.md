@@ -19,7 +19,7 @@ A Claude Code plugin marketplace owned by Chris Pitman. Each folder under `plugi
 - Every implementer and reviewer report ends with a `Learned for AGENTS.md` slot (a rule or `None`). It is a structural slot, not a reminder sentence; keep it in the report template.
 - The repair loop is capped at two BLOCKED rounds per area; the third names the design defect and stops. Do not add a way for the orchestrator to run a fourth round.
 - Design is never delegated: `superpowers:brainstorming` needs the user, so spec writing stays in the orchestrator's context. Do not add a spec-writing agent. `spec-reviewer` reviews a spec; it does not write one.
-- Model and effort are pinned per agent in frontmatter and chosen per role: Opus 5.5 for explorer, quick-implementer (low) and implementer (medium; Opus 5.5 at medium matches or beats Opus 5 at high on agentic coding, per Anthropic's effort docs); Fable 5.1 high for `code-reviewer` and `spec-reviewer` (the reviews that found the serious problems were the long ones); Sonnet 4.6 low for `code-validator` because it only runs assigned commands. Change these deliberately, not as a side effect.
+- Model and effort are pinned per agent in frontmatter and chosen per role: Opus 5.5 for explorer, quick-implementer (low) and implementer (medium; Opus 5.5 at medium matches or beats Opus 5 at high on agentic coding, per Anthropic's effort docs); Fable 5.1 high for `code-reviewer` and `spec-reviewer` (the reviews that found the serious problems were the long ones); Sonnet 5 low for `code-validator` because it only runs assigned commands. Change these deliberately, not as a side effect.
 - Agents read `AGENTS.md` first and fall back to `CLAUDE.md`; the tool-neutral file is the primary one. Keep that order.
 
 ## Conventions
