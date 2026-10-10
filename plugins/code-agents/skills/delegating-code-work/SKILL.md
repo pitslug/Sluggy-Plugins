@@ -20,6 +20,8 @@ Design happens in your own context with `superpowers:brainstorming`; it needs th
 A `spec-reviewer` verdict of BLOCKED means the spec changes, not the plan. Never start writing-plans on a BLOCKED spec.
 
 ## Entry point
+If the repo has no `AGENTS.md`, run `onboarding-repo-for-agents` before dispatching anything.
+
 | Situation | Dispatch |
 |---|---|
 | You cannot name the files and contracts involved | `code-explorer` first |
@@ -36,7 +38,7 @@ Before dispatching any implementer, read the repo's follow-ups file (named under
 2. `code-validator` runs the manifest. On failure classified as regression or test issue, resume the SAME implementer with the evidence; it repairs and returns a smaller manifest. On environment or pre-existing, fix the environment or note it and continue.
 3. `code-reviewer` reviews the diff. `Verdict: BLOCKED` sends the findings back to the same implementer, then validator, then reviewer again (re-review reports only blocking status). `Verdict: CLEAR` exits the loop.
    **Round cap:** two BLOCKED rounds on the same area is the limit. On the third, ask the reviewer to name the design defect, then STOP: do not dispatch another repair. Report to the user with the defect named and the working tree left as is. A redesign is the user's decision; if they choose it, the route is brainstorming then `spec-reviewer`, never straight to an implementer.
-4. Merge every `Learned for AGENTS.md` slot into `AGENTS.md` under the matching heading (Validation notes, Invariants, Conventions). One bullet per item, rule not story. If `AGENTS.md` does not exist, run `onboarding-repo-for-agents` first.
+4. Merge every `Learned for AGENTS.md` slot into `AGENTS.md` under the matching heading (Validation notes, Invariants, Conventions). One bullet per item, rule not story.
 5. File and commit. Advisory findings go to the follow-ups file, one line each with the reviewer's summary and `file:line`, never into another review round. Any follow-up item this work closed moves to the closed-items file if the repo keeps one (Conventions in `AGENTS.md`), in the same commit.
 
 ## Rules

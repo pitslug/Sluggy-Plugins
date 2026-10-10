@@ -28,12 +28,12 @@ A small pipeline of agents, each with one job, one model, and one effort level. 
 
 | Agent | Role | Model / effort |
 |---|---|---|
-| `code-explorer` | Read-only scout. Locates the relevant code and returns a condensed report with `path:line` references, contracts, gotchas and open questions. | Opus 5.5, low |
-| `code-quick-implementer` | Small, mechanical, well-specified edits in one or two files. Runs its own narrow tests. Escalates anything ambiguous or invariant-touching to `code-implementer`. | Opus 5.5, low |
+| `code-explorer` | Read-only scout. Locates the relevant code and returns a condensed report with `path:line` references, contracts, gotchas and open questions. | Sonnet 5.5, medium |
+| `code-quick-implementer` | Small, mechanical, well-specified edits in one or two files. Runs its own narrow tests. Escalates anything ambiguous or invariant-touching to `code-implementer`. | Sonnet 5.5, low |
 | `code-implementer` | Non-trivial slices. Test-first: writes the tests, watches them fail, implements, runs its own added tests, then hands a selector manifest to the validator. | Opus 5.5, medium |
-| `code-validator` | Read-only runner. Executes the assigned selectors, classifies failures (regression / test issue / pre-existing / flaky / environment), never edits. | Sonnet 5, low |
+| `code-validator` | Read-only runner. Executes the assigned selectors, classifies failures (regression / test issue / pre-existing / flaky / environment), never edits. | Sonnet 5.5, low |
 | `spec-reviewer` | Adversarial review of a design before any implementer sees it: lock map for shared resources, crash-point table for file-plus-state protocols, trust boundaries, invariants, and the test that catches each. Mandatory on architectural specs, optional on bounded designs. | Fable 5.1, high |
-| `code-reviewer` | Adversarial pre-commit review. Finds the concrete input that breaks the change, with mandatory checks for shared resources, persisted values that drive file or process operations, file-plus-state crash points, and tests that cannot fail. Two severities: BLOCKING and ADVISORY. | Fable 5.1, high |
+| `code-reviewer` | Adversarial pre-commit review. Finds the concrete input that breaks the change, with mandatory checks for shared resources, persisted values that drive file or process operations, file-plus-state crash points, and tests that cannot fail. Two severities: BLOCKING and ADVISORY. | Fable 5.1, medium |
 
 ### How they fit together
 
